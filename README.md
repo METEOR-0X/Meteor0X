@@ -1,4 +1,7 @@
-# Cybercat 🐈‍⬛
+إليك التحديث الكامل لملف الدليل (README) ليتوافق مع الاسم الجديد "Meteor0x" ومساراته الصحيحة. يمكنك نسخه مباشرة ووضعه في مستودع GitHub الخاص بك:
+
+```markdown
+# Meteor0x ☄️
 
 A very simple and easy command-line tool to save, manage, and remember your cybersecurity tools and commands. 
 
@@ -9,51 +12,70 @@ Before you start, make sure you have:
 
 ## How to install
 
-Follow these simple steps to install Cybercat on your computer:
+Follow these simple steps to install Meteor0x on your computer:
 
 **1. Create a folder for the project:**
 Open your terminal and type:
-    
-    mkdir ~/Cybercat
-    cd ~/Cybercat
+```bash
+mkdir ~/Meteor0x
+cd ~/Meteor0x
 
-*(Make sure to put the `cybercat.py` file inside this folder).*
+```
+
+*(Make sure to put the `meteor0x.py` file inside this folder).*
 
 **2. Make the file executable:**
 You need to give the file permission to run:
-    
-    chmod +x ~/Cybercat/cybercat.py
+
+```bash
+chmod +x ~/Meteor0x/meteor0x.py
+
+```
 
 **3. Create a shortcut:**
-Add the tool to your system so you can just type `cybercat` from anywhere:
-    
-    echo "alias cybercat='~/Cybercat/cybercat.py'" >> ~/.bashrc
-    source ~/.bashrc
+Add the tool to your system so you can just type `meteor0x` from anywhere:
+
+```bash
+echo "alias meteor0x='~/Meteor0x/meteor0x.py'" >> ~/.bashrc
+source ~/.bashrc
+
+```
 
 ## How to use it
 
-Cybercat is very easy to use. Here are the commands you can type in your terminal:
+Meteor0x is very easy to use. Here are the commands you can type in your terminal:
 
 ### Manage Your Tools
+
 * **Add a new tool:**
-  `cybercat add nmap "Used for network scanning and port enumeration."`
+`meteor0x add nmap "Used for network scanning and port enumeration."`
 * **Read about a tool:**
-  `cybercat show nmap`
+`meteor0x show nmap`
 * **Change a tool's description:**
-  `cybercat edit nmap "New description here."`
+`meteor0x edit nmap "New description here."`
 * **Delete a tool:**
-  `cybercat delete nmap`
+`meteor0x delete nmap`
 * **See all your saved tools:**
-  `cybercat list`
+`meteor0x list`
 
 ### Manage Your Commands
+
 * **Add a specific command:**
-  `cybercat add-cmd "nmap -sV target" "Scan for open ports and services."`
+`meteor0x add-cmd "nmap -sV target" "Scan for open ports and services."`
 * **Read about a command:**
-  `cybercat show-cmd "nmap -sV target"`
+`meteor0x show-cmd "nmap -sV target"`
 * **See all your saved commands:**
-  `cybercat list-cmd`
+`meteor0x list-cmd`
 
 ### Export Your Data
+
 * **Save all your tools and commands to a text file:**
-  `cybercat export`
+`meteor0x export`
+
+---
+
+*Created for cybersecurity students and enthusiasts to keep things organized.*
+
+```
+
+```
