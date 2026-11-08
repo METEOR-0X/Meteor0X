@@ -7,9 +7,15 @@ import textwrap
 
 # Set up paths to ensure data remains with the script
 APP_DIR = os.path.dirname(os.path.realpath(__file__))
-DB_FILE = os.path.join(APP_DIR, "cybercat_db.json")
+DB_FILE = os.path.join(APP_DIR, "meteor0x_db.json")
 
 def load_db():
+    # Seamless migration from the old Cybercat DB to Meteor0x DB
+    old_db_file = os.path.join(APP_DIR, "cybercat_db.json")
+    if os.path.exists(old_db_file) and not os.path.exists(DB_FILE):
+        os.rename(old_db_file, DB_FILE)
+        print("[*] Info: Database automatically migrated from Cybercat to Meteor0x.")
+
     if not os.path.exists(DB_FILE):
         data = {"tools": {}, "commands": {}}
         with open(DB_FILE, 'w') as f:
@@ -19,7 +25,7 @@ def load_db():
     with open(DB_FILE, 'r') as f:
         data = json.load(f)
         
-        # Auto-migrate old database structure to the new one
+        # Auto-migrate structure if needed
         if "tools" not in data and "commands" not in data:
             new_data = {"tools": data, "commands": {}}
             save_db(new_data)
@@ -32,14 +38,14 @@ def save_db(data):
         json.dump(data, f, indent=4)
 
 def print_logo():
-    # Massive, bold ASCII art for CYBERCAT
+    # Massive, bold ASCII art for METEOR0X
     logo = r"""
- ██████╗██╗   ██╗██████╗ ███████╗██████╗  ██████╗ █████╗ ████████╗
-██╔════╝╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝
-██║      ╚████╔╝ ██████╔╝█████╗  ██████╔╝██║     ███████║   ██║   
-██║       ╚██╔╝  ██╔══██╗██╔══╝  ██╔══██╗██║     ██╔══██║   ██║   
-╚██████╗   ██║   ██████╔╝███████╗██║  ██║╚██████╗██║  ██║   ██║   
- ╚═════╝   ╚═╝   ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝   
+ ███╗   ███╗ ███████╗ ████████╗ ███████╗ ██████╗  ██████╗  ██████╗  ██╗  ██╗
+ ████╗ ████║ ██╔════╝ ╚══██╔══╝ ██╔════╝ ██╔══██╗ ██╔══██╗ ██╔═████╗╚██╗██╔╝
+ ██╔████╔██║ █████╗      ██║    █████╗   ██║  ██║ ██████╔╝ ██║██╔██║ ╚███╔╝ 
+ ██║╚██╔╝██║ ██╔══╝      ██║    ██╔══╝   ██║  ██║ ██╔══██╗ ████╔╝██║ ██╔██╗ 
+ ██║ ╚═╝ ██║ ███████╗    ██║    ███████╗ ╚██████╔╝██║  ██║ ╚██████╔╝██╔╝ ██╗
+ ╚═╝     ╚═╝ ╚══════╝    ╚═╝    ╚══════╝  ╚═════╝ ╚═╝  ╚═╝  ╚═════╝ ╚═╝  ╚═╝
     """
     # ANSI escape code for Hex #3492ad (RGB: 52, 146, 173)
     color_start = "\033[38;2;52;146;173m"
@@ -100,7 +106,7 @@ def add_tool(name, description):
     else:
         db["tools"][name] = description
         save_db(db)
-        print(f"[+] Success: Tool '{name}' added successfully to Cybercat.")
+        print(f"[+] Success: Tool '{name}' added successfully to Meteor0x.")
 
 def show_tool(name):
     db = load_db()
@@ -126,7 +132,7 @@ def delete_tool(name):
     if name in db["tools"]:
         del db["tools"][name]
         save_db(db)
-        print(f"[+] Success: Tool '{name}' deleted successfully from Cybercat.")
+        print(f"[+] Success: Tool '{name}' deleted successfully from Meteor0x.")
     else:
         print(f"[-] Error: Tool '{name}' not found.")
 
@@ -136,7 +142,7 @@ def list_tools():
         print("[!] The tools database is empty. Add some tools first.")
         return
     print_logo()
-    draw_table("CYBERCAT TOOLS LIST", "TOOL NAME", "DESCRIPTION", db["tools"])
+    draw_table("METEOR0X TOOLS LIST", "TOOL NAME", "DESCRIPTION", db["tools"])
 
 # --- COMMANDS FUNCTIONS ---
 
@@ -147,7 +153,7 @@ def add_cmd(cmd, description):
     else:
         db["commands"][cmd] = description
         save_db(db)
-        print(f"[+] Success: Command added successfully to Cybercat.")
+        print(f"[+] Success: Command added successfully to Meteor0x.")
 
 def show_cmd(cmd):
     db = load_db()
@@ -170,7 +176,7 @@ def delete_cmd(cmd):
     if cmd in db["commands"]:
         del db["commands"][cmd]
         save_db(db)
-        print(f"[+] Success: Command deleted successfully from Cybercat.")
+        print(f"[+] Success: Command deleted successfully from Meteor0x.")
     else:
         print(f"[-] Error: Command not found.")
 
@@ -180,7 +186,7 @@ def list_cmds():
         print("[!] The commands database is empty. Add some commands first.")
         return
     print_logo()
-    draw_table("CYBERCAT COMMANDS LIST", "COMMAND", "DESCRIPTION", db["commands"])
+    draw_table("METEOR0X COMMANDS LIST", "COMMAND", "DESCRIPTION", db["commands"])
 
 # --- EXPORT FUNCTION ---
 
@@ -195,7 +201,7 @@ def export_data(filename):
     try:
         with open(export_path, 'w') as f:
             f.write("=" * 80 + "\n")
-            f.write(" " * 30 + "CYBERCAT EXPORT\n")
+            f.write(" " * 30 + "METEOR0X EXPORT\n")
             f.write("=" * 80 + "\n\n")
             
             if db["tools"]:
@@ -217,7 +223,7 @@ def export_data(filename):
         print(f"[-] Error: Could not write to file. Details: {e}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Cybercat - Cybersecurity Tools and Commands Manager")
+    parser = argparse.ArgumentParser(description="Meteor0x - Cybersecurity Tools and Commands Manager")
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
     
     # Tool commands
@@ -256,7 +262,7 @@ def main():
 
     # Export command
     export_parser = subparsers.add_parser("export", help="Export tools and commands to a text file")
-    export_parser.add_argument("--file", default="cybercat_export.txt", help="Output file name (optional)")
+    export_parser.add_argument("--file", default="meteor0x_export.txt", help="Output file name (optional)")
 
     args = parser.parse_args()
 
