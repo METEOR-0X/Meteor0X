@@ -70,10 +70,3 @@ Meteor0x is very easy to use. Here are the commands you can type in your termina
 * **Save all your tools and commands to a text file:**
 `meteor0x export`
 
----
-
-*Created for cybersecurity students and enthusiasts to keep things organized.*
-
-```
-
-```
