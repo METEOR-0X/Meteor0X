@@ -57,6 +57,3 @@ Cybercat is very easy to use. Here are the commands you can type in your termina
 ### Export Your Data
 * **Save all your tools and commands to a text file:**
   `cybercat export`
-
----
-*Created for cybersecurity students and enthusiasts to keep things organized.*
