@@ -2,6 +2,8 @@
 import argparse
 import json
 import os
+import shutil
+import textwrap
 
 # Set up paths to ensure data remains with the script
 APP_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -30,32 +32,60 @@ def save_db(data):
         json.dump(data, f, indent=4)
 
 def print_logo():
+    # Massive, bold ASCII art for CYBERCAT
     logo = r"""
-  ____ __   __ ____  _____  ____   ____    _  _____ 
- / ___|\ \ / /| __ )| ____||  _ \ / ___|  / \|_   _|
-| |     \ V / |  _ \|  _|  | |_) | |     / _ \ | |  
-| |___   | |  | |_) | |___ |  _ <| |___ / ___ \| |  
- \____|  |_|  |____/|_____||_| \_\____/_/   \_\_|  
-"""
+ ██████╗██╗   ██╗██████╗ ███████╗██████╗  ██████╗ █████╗ ████████╗
+██╔════╝╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝
+██║      ╚████╔╝ ██████╔╝█████╗  ██████╔╝██║     ███████║   ██║   
+██║       ╚██╔╝  ██╔══██╗██╔══╝  ██╔══██╗██║     ██╔══██║   ██║   
+╚██████╗   ██║   ██████╔╝███████╗██║  ██║╚██████╗██║  ██║   ██║   
+ ╚═════╝   ╚═╝   ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝   
+    """
     # ANSI escape code for Hex #3492ad (RGB: 52, 146, 173)
     color_start = "\033[38;2;52;146;173m"
     color_reset = "\033[0m"
     print(f"{color_start}{logo}{color_reset}")
 
 def draw_table(title, col1_name, col2_name, data_dict):
-    # Calculate column widths dynamically based on the longest string
-    col1_width = max(len(col1_name), max((len(k) for k in data_dict.keys()), default=0)) + 2
-    col2_width = max(len(col2_name), max((len(v) for v in data_dict.values()), default=0)) + 2
-
-    separator = f"+{'-' * col1_width}+{'-' * col2_width}+"
+    # Get terminal width, leaving a safe margin of 2 characters to prevent auto-wrapping
+    term_width = shutil.get_terminal_size().columns - 2
+    
+    # Fallback for extremely small terminals
+    if term_width < 40:
+        term_width = 80 
+        
+    # The borders use exactly 7 characters: "| " + " | " + " |"
+    border_width = 7
+    available_width = term_width - border_width
+    
+    # Calculate maximum needed width for column 1
+    max_col1_content = max((len(k) for k in data_dict.keys()), default=0)
+    col1_width_needed = max(len(col1_name), max_col1_content)
+    
+    # Cap column 1 width to 30% of available space
+    col1_width = min(col1_width_needed, int(available_width * 0.30))
+    
+    # Remaining space goes to column 2
+    col2_width = available_width - col1_width
+    
+    separator = f"+{'-' * (col1_width + 2)}+{'-' * (col2_width + 2)}+"
 
     print(f"  {title}")
     print(separator)
-    print(f"| {col1_name.ljust(col1_width - 2)} | {col2_name.ljust(col2_width - 2)} |")
+    print(f"| {col1_name.ljust(col1_width)} | {col2_name.ljust(col2_width)} |")
     print(separator)
     
     for key, value in data_dict.items():
-        print(f"| {key.ljust(col1_width - 2)} | {value.ljust(col2_width - 2)} |")
+        key_lines = textwrap.wrap(key, col1_width) if key else [""]
+        val_lines = textwrap.wrap(value, col2_width) if value else [""]
+        
+        max_lines = max(len(key_lines), len(val_lines))
+        
+        for i in range(max_lines):
+            k_str = key_lines[i] if i < len(key_lines) else ""
+            v_str = val_lines[i] if i < len(val_lines) else ""
+            print(f"| {k_str.ljust(col1_width)} | {v_str.ljust(col2_width)} |")
+            
         print(separator)
         
     print()
